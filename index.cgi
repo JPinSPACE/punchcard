@@ -5,7 +5,12 @@
 import cgitb
 cgitb.enable()
 
-print "Content-Type: text/plain;charset=utf-8"
-print
+from string import Template
 
-print "Punchcard!"
+t = open('templates/main.html', 'r')
+main = Template(t.read())
+
+print "Content-Type: text/html;charset=utf-8"
+print
+print template.substitute(subs)
+
