@@ -12,5 +12,5 @@ main = Template(t.read())
 
 print "Content-Type: text/html;charset=utf-8"
 print
-print main
+print main.substitute()
 
