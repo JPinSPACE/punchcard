@@ -11,7 +11,7 @@ def get_color(value):
     if value == 1:
         return 'ff0000'
     else:
-        return '000000'
+        return 'ffffff'
 
 # print header
 print "Content-Type: text/html;charset=utf-8"
