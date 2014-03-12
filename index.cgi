@@ -9,7 +9,7 @@ from string import Template
 
 def get_color(value):
     if value == 1:
-        return 'ffffff'
+        return 'ff0000'
     else:
         return '000000'
 
@@ -36,10 +36,10 @@ fake_data = {
 table_rows = ''
 
 for i in range(5):
-    row = ''
+    this_row = ''
     for col in fake_data.keys():
         row += cell.substitute({'color' : get_color(fake_data[col][i])})
-    table_rows += row
+    table_rows += row.substitute({'row_cells' : this_row})
 
 print main.substitute({'table_rows':table_rows})
 
