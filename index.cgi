@@ -38,7 +38,7 @@ table_rows = ''
 for i in range(5):
     this_row = ''
     for col in fake_data.keys():
-        row += cell.substitute({'color' : get_color(fake_data[col][i])})
+        this_row += cell.substitute({'color' : get_color(fake_data[col][i])})
     table_rows += row.substitute({'row_cells' : this_row})
 
 print main.substitute({'table_rows':table_rows})
