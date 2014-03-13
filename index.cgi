@@ -7,19 +7,19 @@ cgitb.enable()
 
 from string import Template
 import random
-from random import randrange
 
 def get_color(series, i):
     value = series['data'][i]
     if value == 1:
-        return series['color']
+        return 'hsl(' + str(series['color']) + ', 100%, 50%)'
     else:
-        return 'ffffff'
+        num = random.randint(220,240)
+        return '#%02x%02x%02x' % (num, num, num)
 
 def random_data(n):
     sequence = []
     for i in range(n):
-        sequence.append(randrange(2))
+        sequence.append(random.randrange(2))
     return sequence
 
 # print header
@@ -37,14 +37,14 @@ cell = Template(t.read())
 
 # temporary nonsense
 grid_length = 80
-columns = 10
+columns = 30
 r = lambda: random.randint(0,255)
 
 data = []
 for i in range(columns):
     data.append({
         'data'  : random_data(grid_length),
-        'color' : '%02x%02x%02x' % (r(),r(),r()),
+        'color' : random.randint(0, 359),
         'type'  : 'binary',
     })
 

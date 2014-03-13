@@ -1,11 +1,12 @@
 .cell {
-	border: 1px solid black;
 	width: 10px;
 	height: 10px;
+	border-collapse: collapse;
+	border: none;
 }
 
 table {
 	border-spacing: 10px 2px;
-	border-collapse: separate;
+	border-collapse: collapse;
 	margin: auto;
 }
