@@ -6,12 +6,21 @@ import cgitb
 cgitb.enable()
 
 from string import Template
+import random
+from random import randrange
 
-def get_color(value, color):
+def get_color(series, i):
+    value = series['data'][i]
     if value == 1:
-        return color
+        return series['color']
     else:
         return 'ffffff'
+
+def random_data(n):
+    sequence = []
+    for i in range(n):
+        sequence.append(randrange(2))
+    return sequence
 
 # print header
 print "Content-Type: text/html;charset=utf-8"
@@ -26,26 +35,27 @@ row = Template(t.read())
 t = open('templates/cell.html', 'r')
 cell = Template(t.read())
 
-colors = {
-    'alpha' : '9999ff',
-    'beta'  : '00ff00',
-    'delta' : '0000ff',
-    'gamma' : '00ffff',
-}
+# temporary nonsense
+grid_length = 80
+columns = 10
+r = lambda: random.randint(0,255)
 
-fake_data = {
-    'alpha' : (0, 0, 1, 1, 0),
-    'beta'  : (1, 1, 1, 1, 0),
-    'delta' : (0, 0, 0, 1, 0),
-    'gamma' : (1, 1, 1, 0, 0),
-}
+data = []
+for i in range(columns):
+    data.append({
+        'data'  : random_data(grid_length),
+        'color' : '%02x%02x%02x' % (r(),r(),r()),
+        'type'  : 'binary',
+    })
+
 
 table_rows = ''
 
-for i in range(5):
+for i in range(grid_length):
     this_row = ''
-    for col in fake_data.keys():
-        this_row += cell.substitute({'color' : get_color(fake_data[col][i], colors[col])})
+    for col in data:
+        color = get_color(col, i)
+        this_row += cell.substitute( {'color' : color })
     table_rows += row.substitute({'row_cells' : this_row})
 
 print main.substitute({'table_rows':table_rows})
