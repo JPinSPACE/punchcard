@@ -3,3 +3,9 @@
 	width: 10px;
 	height: 10px;
 }
+
+table {
+	border-spacing: 10px 2px;
+	border-collapse: separate;
+	margin: auto;
+}
