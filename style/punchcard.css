@@ -10,3 +10,7 @@ table {
 	border-collapse: collapse;
 	margin: auto;
 }
+
+body {
+	background-color: #eeeeee;
+}

@@ -1,29 +1,33 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-
-
 from string import Template
 import random
 
 def get_color(series, i):
     value = series['data'][i]
-    if value == 1:
-        return 'hsl(' + str(series['color']) + ', 100%, 50%)'
+    if series['type'] == 'binary':
+        if value == 1:
+            return 'hsl(' + str(series['color']) + ', 80%, 50%)'
+        else:
+            return '#ffffff'
+    elif series['type'] == 'absolute':
+        inc = 70 / (series['max'] - series['min'])
+        light = 100 - value * inc
+        return "hsl(%d, 80%%, %d%%)" % (series['color'], light)
+    elif series['type'] == 'relative':
+        inc = 70 / (max(series['data']) - min(series['data']))
+        light = 100 - value * inc
+        return "hsl(%d, 80%%, %d%%)" % (series['color'], light)
     else:
-        num = random.randint(220,240)
-        return '#%02x%02x%02x' % (num, num, num)
+        return '#ffffff'
 
-def random_data(n):
+def random_data(length, choices):
     sequence = []
-    for i in range(n):
-        sequence.append(random.randrange(2))
+    for i in range(length):
+        sequence.append(random.randrange(choices))
     return sequence
-
 
 def main():
     print "Content-Type: text/html;charset=utf-8"
     print
-
 
     # read in all templates
     t = open('templates/main.html', 'r')
@@ -35,20 +39,57 @@ def main():
 
     # temporary nonsense
     grid_length = 80
-    columns = 30
-    r = lambda: random.randint(0,255)
+    columns = 2
 
+    # fake data is the best data
     data = []
-    for i in range(columns):
-        data.append({
-            'data'  : random_data(grid_length),
-            'color' : random.randint(0, 359),
-            'type'  : 'binary',
-        })
+    data.append({
+        'data'  : random_data(grid_length, 2),
+        'color' : random.randint(0, 359),
+        'type'  : 'binary',
+    })
+    data.append({
+        'data'  : random_data(grid_length, 2),
+        'color' : random.randint(0, 359),
+        'type'  : 'binary',
+    })
+
+    data.append({
+        'data'  : random_data(grid_length, 4),
+        'color' : random.randint(0, 359),
+        'type'  : 'absolute',
+        'min'   : 0,
+        'max'   : 3,
+    })
+    data.append({
+        'data'  : random_data(grid_length, 8),
+        'color' : random.randint(0, 359),
+        'type'  : 'absolute',
+        'min'   : 0,
+        'max'   : 7,
+    })
+
+    data.append({
+        'data'  : random_data(grid_length, 8),
+        'color' : random.randint(0, 359),
+        'type'  : 'relative',
+    })
+    data.append({
+        'data'  : random_data(grid_length, 8),
+        'color' : random.randint(0, 359),
+        'type'  : 'relative',
+    })
+
+
+
+    data[4]['data'][0] = 50
+    
+    for i in range(len(data[5]['data'])):
+        if i % 5 != 0:
+            data[5]['data'][i] += 20
 
 
     table_rows = ''
-
     for i in range(grid_length):
         this_row = ''
         for col in data:
