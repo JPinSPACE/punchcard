@@ -24,7 +24,11 @@ def get_all_data():
 ### SEQUENCE ##################################################################
 
 # add sequence with optional data
-def add_sequence(name, color, data=None):
+def add_sequence(name, color, type, data=None):
+    pass
+
+# update sequence attributes
+def update_sequence(name, new_data):
     pass
 
 # get all data for one sequence
