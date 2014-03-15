@@ -47,22 +47,39 @@ except lite.Error, e:
 
 cur = conn.cursor()
 if clean is True:
-    cur.execute("DROP TABLE data")
-    cur.execute("DROP TABLE views")
-    cur.execute("DROP TABLE sequences")
+    try:
+        cur.execute("DROP TABLE data")
+        print "Dropped table 'data'"
+    except lite.Error, e:
+        print "Table 'data' was not present"
+
+    try:
+        cur.execute("DROP TABLE views")
+        print "Dropped table 'views'"
+    except lite.Error, e:
+        print "Table 'views' was not present"
+
+    try:
+        cur.execute("DROP TABLE sequences")
+        print "Dropped table 'sequences'"
+    except lite.Error, e:
+        print "Table 'sequences' was not present"
 
 try:
     cur.execute("CREATE TABLE data(sequence TEXT, date TEXT, value REAL)")
+    print "Created table 'data'"
 except lite.Error, e:
     print "Table 'data' already exists. Use --clean or -c to wipe data."
 
 try:
-    cur.execute("CREATE TABLE views(name TEXT, type, TEXT, color_info BLOB")
+    cur.execute("CREATE TABLE views(name TEXT, type, TEXT, color_info BLOB)")
+    print "Created table 'views'"
 except lite.Error, e:
     print "Table 'views' already exists. Use --clean or -c to wipe data."
 
 try:
     cur.execute("CREATE TABLE sequences(name TEXT, view TEXT)")
+    print "Created table 'sequences'"
 except lite.Error, e:
     print "Table 'sequences' already exists. Use --clean or -c to wipe data."
 
