@@ -21,14 +21,15 @@ def get_conn():
 def get_all_data():
     pass
 
+
 ### SEQUENCE ##################################################################
 
 # add sequence with optional data
-def add_sequence(name, color, type, data=None):
+def add_sequence(seq, view, data=None):
     pass
 
 # update sequence attributes
-def update_sequence(name, new_data):
+def update_sequence(seq, view=None, data=None):
     pass
 
 # get all data for one sequence
@@ -41,6 +42,20 @@ def add_to_sequence(seq, date):
 
 # delete an entire sequence
 def delete_sequence(seq):
+    pass
+
+### VIEWS #####################################################################
+
+# create new view
+def add_view (view, type, color_info):
+    pass
+
+# delete existing view. will fail if view is in use
+def delete_view (view):
+    pass
+
+# update view's type and/or color_info
+def update_view (view, type=None, color_info=None):
     pass
 
 ### DATUM #####################################################################
