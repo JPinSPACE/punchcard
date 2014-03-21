@@ -72,7 +72,7 @@ except lite.Error, e:
     print "Table 'data' already exists. Use --clean or -c to wipe data."
 
 try:
-    cur.execute("CREATE TABLE views(name TEXT, type, TEXT, color_info BLOB)")
+    cur.execute("CREATE TABLE views(name TEXT, type, TEXT, color_info TEXT)")
     print "Created table 'views'"
 except lite.Error, e:
     print "Table 'views' already exists. Use --clean or -c to wipe data."
@@ -82,6 +82,3 @@ try:
     print "Created table 'sequences'"
 except lite.Error, e:
     print "Table 'sequences' already exists. Use --clean or -c to wipe data."
-
-
-# TODO: generate sample data if requested
