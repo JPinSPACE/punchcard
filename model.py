@@ -37,8 +37,15 @@ def get_sequence(seq):
     pass
 
 # add one datum to one sequence
-def add_to_sequence(seq, date):
-    pass
+def add_to_sequence(seq, date, value):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("INSERT INTO data (sequence, date, value)" +
+        "VALUES (?, ?, ?)", seq, date, value)
+
+    c.commit()
+    c.close()
 
 # delete an entire sequence
 def delete_sequence(seq):
