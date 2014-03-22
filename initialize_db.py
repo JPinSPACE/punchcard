@@ -4,6 +4,8 @@ import sqlite3 as lite
 import sys
 import getopt
 import random
+import json
+import datetime
 
 def help():
     print "Usage: initialize_db.py [-c, --clean] [-s, --sample] [-h, --help]"
@@ -85,12 +87,23 @@ except lite.Error, e:
 
 if sample is True:
     print "Inserting sample data.."
+
+### BINARY SAMPLE #############################################################
+    color_info = {'color' : (255, 255, 0) }
+    color_info = json.dumps(color_info)
     cur.execute("INSERT INTO sequences (name, label)" + 
         "VALUES ('worked_out', 'Worked Out')")
+    cur.execute("INSERT INTO views (name, type, color_info)" +
+        "VALUES ('worked_out', 'binary', ?)", [color_info])
+
+    d = datetime.date.today()
+    day = datetime.timedelta(days=1)
+    for i in range(20):
+        cur.execute("INSERT INTO data (sequence, date, value)" +
+            "VALUES ('worked_out', ?, ?)", [d.__str__(), random.randrange(2)])
+        d += day
 
 
-    cur.execute("INSERT INTO sequences (name, label)" + 
-        "VALUES ('watched_tv', 'Watched TV')")
 
 conn.commit()
 conn.close()
