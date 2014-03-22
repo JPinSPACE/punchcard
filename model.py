@@ -111,6 +111,16 @@ def get_sequence_data(seq):
 
     return data
 
+def get_sequence_names():
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("SELECT name FROM sequences ORDER BY name ASC")
+
+    sequences = c.fetchall()
+
+    return sequences
+
 # add one datum to one sequence
 #
 # param seq - string - sequence name
@@ -260,18 +270,3 @@ def delete_datum(seq, date):
     conn.close()
 
     return True
-
-### DATE ######################################################################
-
-# add date with optional data
-# if no data is passed, it will be entered as zeroes
-def add_date(date, date=None):
-    pass
-
-# update all data for one date, i.e. the datum for each sequence on this date
-def update_date_data(date, date):
-    pass
-
-# delete all data for a date and remove the date entirely
-def delete_date(date):
-    pass
