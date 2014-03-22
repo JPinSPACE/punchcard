@@ -62,8 +62,21 @@ def update_sequence(seq, view=None, data=None):
     pass
 
 # get all data for one sequence
-def get_sequence(seq):
-    pass
+#
+# param seq - string - sequence name
+# returns dict - dates and values
+def get_sequence_data(seq):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("SELECT date, value FROM data" +
+        "WHERE sequence = ? ORDER BY date DESC")
+
+    data = c.fetchall()
+
+    c.close()
+
+    return data
 
 # add one datum to one sequence
 def add_to_sequence(seq, date, value):
