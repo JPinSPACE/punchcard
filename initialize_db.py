@@ -103,6 +103,21 @@ if sample is True:
             "VALUES ('worked_out', ?, ?)", [d.__str__(), random.randrange(2)])
         d += day
 
+### ABSOLUTE SAMPLE ###########################################################
+    color_info = {'color' : (0, 0, 255), 'shades' : 4 }
+    color_info = json.dumps(color_info)
+    cur.execute("INSERT INTO sequences (name, label)" + 
+        "VALUES ('sleeping', 'Sleeping Quality')")
+    cur.execute("INSERT INTO views (name, type, color_info)" +
+        "VALUES ('sleeping', 'absolute', ?)", [color_info])
+
+    d = datetime.date.today()
+    day = datetime.timedelta(days=1)
+    for i in range(20):
+        cur.execute("INSERT INTO data (sequence, date, value)" +
+            "VALUES ('sleeping', ?, ?)", [d.__str__(), random.randrange(4)])
+        d += day
+
 
 
 conn.commit()
