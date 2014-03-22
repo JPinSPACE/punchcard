@@ -219,7 +219,7 @@ def add_datum(seq, date, value):
     c = conn.cursor()
 
     c.execute("SELECT value FROM data WHERE seq = ? AND date = ?", [seq, date])
-    existing = c.fetchon()
+    existing = c.fetchone()
 
     if existing is not None:
         return False
