@@ -48,8 +48,15 @@ def add_to_sequence(seq, date, value):
     c.close()
 
 # delete an entire sequence
-def delete_sequence(seq):
-    pass
+def delete_sequence(seq, remove_view=True):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("DELETE FROM sequences WHERE name = ? LIMIT 1", seq)
+    c.execute("DELETE FROM data WHERE sequence = ?", seq)
+    c.execute("DELETE FORM views WHERE name = ?", seq)
+    c.commit()
+    c.close()
 
 ### VIEWS #####################################################################
 
