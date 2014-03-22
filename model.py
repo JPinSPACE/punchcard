@@ -30,7 +30,32 @@ def get_all_data():
 
 # add sequence with optional data
 def add_sequence(seq, view, data=None):
-    pass
+    conn = get_conn()
+    c = conn.cursor()
+
+    if 'name' is not in seq:
+        fail('add_sequence - sequence is missing attribute "name"')
+    if 'label' is not in seq:
+        fail('add_sequence - sequence is missing attribute "label"')
+
+    if 'type' is not in view:
+        fail('add_sequence - view is missing attribute "type"')
+    if 'color_info' is not in view:
+        fail('add_sequence - view is missing attribute "color_info"')
+
+    c.execute("INSERT INTO sequences (name, label)" +
+        "VALUES (?, ?)", [seq.name, seq.label])
+
+    c.execute("INSERT INTO views (name, type, color_info)" +
+        "VALUES (?, ?, ?)", [seq.name, view.type, view.color_info])
+
+    if data is not None:
+        for datum in data:
+            c.execute("INSERT INTO data (sequence, date, value)" +
+                "VALUES (?, ?, ?)", [seq.name, datum.date, datum.value])
+
+    c.commit()
+    c.close()
 
 # update sequence attributes
 def update_sequence(seq, view=None, data=None):
