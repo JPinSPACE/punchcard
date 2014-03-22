@@ -1,5 +1,6 @@
 import sqlite3 as lite
 import sys
+import json
 
 db_conn = None
 
@@ -151,16 +152,54 @@ def delete_sequence(seq, remove_view=True):
 ### VIEWS #####################################################################
 
 # create new view
-def add_view (view, type, color_info):
-    pass
+def add_view (name, type, color_info):
+    color_info = json.dumps(color_info)
+
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("INSERT INTO views (name, type, color_info)" +
+        "VALUES (?, ?, ?)", [name, type, color_info])
+
+    c.commit()
+    conn.close()
+
+    return True
+
 
 # delete existing view. will fail if view is in use
-def delete_view (view):
-    pass
+def delete_view (name):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("DELETE FROM views WHERE name = ? LIMIT 1", [name])
+
+    c.commit()
+    conn.close()
+
+    return True
 
 # update view's type and/or color_info
-def update_view (view, type=None, color_info=None):
-    pass
+def update_view (name, type=None, color_info=None):
+    if type is None and color_info is None:
+        return True
+
+    conn = get_conn()
+    c = conn.cursor()
+
+    if type is not None:
+        c.execute("UPDATE views SET type = ? WHERE name = ? LIMIT 1",
+            [type, name])
+
+    if color_info is not None:
+        c.execute("UPDATE views SET color_info = ? WHERE name = ? LIMIT 1",
+            [color_info, name])
+
+    c.commit()
+    conn.close()
+
+    return True
+
 
 ### DATUM #####################################################################
 
