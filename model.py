@@ -61,7 +61,7 @@ def add_sequence(seq, view, data=None):
                 "VALUES (?, ?, ?)", [seq.name, datum, data[datum]])
 
     c.commit()
-    c.close()
+    conn.close()
 
     return True
 
@@ -106,7 +106,7 @@ def get_sequence_data(seq):
 
     data = c.fetchall()
 
-    c.close()
+    conn.close()
 
     return data
 
@@ -125,7 +125,7 @@ def add_to_sequence(seq, date, value):
         "VALUES (?, ?, ?)", [seq, date, value])
 
     c.commit()
-    c.close()
+    conn.close()
 
     return True
 
@@ -142,8 +142,9 @@ def delete_sequence(seq, remove_view=True):
     c.execute("DELETE FROM sequences WHERE name = ? LIMIT 1", [seq])
     c.execute("DELETE FROM data WHERE sequence = ?", [seq])
     c.execute("DELETE FORM views WHERE name = ?", [seq])
+
     c.commit()
-    c.close()
+    conn.close()
 
     return True
 
