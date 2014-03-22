@@ -118,6 +118,20 @@ if sample is True:
             "VALUES ('sleeping', ?, ?)", [d.__str__(), random.randrange(4)])
         d += day
 
+### RELATIVE SAMPLE ###########################################################
+    color_info = {'color' : (0, 255, 0) }
+    color_info = json.dumps(color_info)
+    cur.execute("INSERT INTO sequences (name, label)" + 
+        "VALUES ('random', 'Random data!')")
+    cur.execute("INSERT INTO views (name, type, color_info)" +
+        "VALUES ('random', 'relative', ?)", [color_info])
+
+    d = datetime.date.today()
+    day = datetime.timedelta(days=1)
+    for i in range(20):
+        cur.execute("INSERT INTO data (sequence, date, value)" +
+            "VALUES ('random', ?, ?)", [d.__str__(), random.randrange(50)])
+        d += day
 
 
 conn.commit()
