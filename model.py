@@ -29,6 +29,12 @@ def get_all_data():
 ### SEQUENCE ##################################################################
 
 # add sequence with optional data
+#
+# param seq - dict - sequence name and label
+# param view - dict - information required for this view type
+# param data - dict - OPTIONAL - data for the sequence
+#
+# return True - success
 def add_sequence(seq, view, data=None):
     conn = get_conn()
     c = conn.cursor()
@@ -57,6 +63,8 @@ def add_sequence(seq, view, data=None):
     c.commit()
     c.close()
 
+    return True
+
 # update sequence attributes
 def update_sequence(seq, view=None, data=None):
     pass
@@ -64,6 +72,7 @@ def update_sequence(seq, view=None, data=None):
 # get all data for one sequence
 #
 # param seq - string - sequence name
+#
 # returns dict - dates and values
 def get_sequence_data(seq):
     conn = get_conn()
@@ -79,6 +88,12 @@ def get_sequence_data(seq):
     return data
 
 # add one datum to one sequence
+#
+# param seq - string - sequence name
+# param date - string - date
+# param value - float - value
+#
+# return True - success
 def add_to_sequence(seq, date, value):
     conn = get_conn()
     c = conn.cursor()
@@ -89,7 +104,14 @@ def add_to_sequence(seq, date, value):
     c.commit()
     c.close()
 
+    return True
+
 # delete an entire sequence
+#
+# param seq - string - sequence name
+# param remove_view  - boolean - defaults to True, removes associated view
+#
+# return True - success
 def delete_sequence(seq, remove_view=True):
     conn = get_conn()
     c = conn.cursor()
@@ -99,6 +121,8 @@ def delete_sequence(seq, remove_view=True):
     c.execute("DELETE FORM views WHERE name = ?", [seq])
     c.commit()
     c.close()
+
+    return True
 
 ### VIEWS #####################################################################
 
