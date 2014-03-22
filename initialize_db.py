@@ -78,7 +78,19 @@ except lite.Error, e:
     print "Table 'views' already exists. Use --clean or -c to wipe data."
 
 try:
-    cur.execute("CREATE TABLE sequences(name TEXT, view TEXT)")
+    cur.execute("CREATE TABLE sequences(name TEXT, label TEXT)")
     print "Created table 'sequences'"
 except lite.Error, e:
     print "Table 'sequences' already exists. Use --clean or -c to wipe data."
+
+if sample is True:
+    print "Inserting sample data.."
+    cur.execute("INSERT INTO sequences (name, label)" + 
+        "VALUES ('worked_out', 'Worked Out')")
+
+
+    cur.execute("INSERT INTO sequences (name, label)" + 
+        "VALUES ('watched_tv', 'Watched TV')")
+
+conn.commit()
+conn.close()
