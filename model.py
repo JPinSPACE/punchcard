@@ -15,6 +15,10 @@ def get_conn():
             print "Error %s:" % e.args[0]
             sys.exit(1)
 
+def fail(msg):
+    print msg
+    sys.exit(1)
+
 ### ALL DATA ##################################################################
 
 # get all data from all sequences
