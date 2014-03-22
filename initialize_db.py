@@ -101,7 +101,7 @@ if sample is True:
     for i in range(20):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('worked_out', ?, ?)", [d.__str__(), random.randrange(2)])
-        d += day
+        d -= day
 
 ### ABSOLUTE SAMPLE ###########################################################
     color_info = {'color' : (0, 0, 255), 'shades' : 4 }
@@ -116,7 +116,7 @@ if sample is True:
     for i in range(20):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('sleeping', ?, ?)", [d.__str__(), random.randrange(4)])
-        d += day
+        d -= day
 
 ### RELATIVE SAMPLE ###########################################################
     color_info = {'color' : (0, 255, 0) }
@@ -131,7 +131,7 @@ if sample is True:
     for i in range(20):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('random', ?, ?)", [d.__str__(), random.randrange(50)])
-        d += day
+        d -= day
 
 
 conn.commit()
