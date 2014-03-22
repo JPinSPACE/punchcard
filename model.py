@@ -204,20 +204,62 @@ def update_view (name, type=None, color_info=None):
 ### DATUM #####################################################################
 
 # add one datum
-def add_datum(seq, date, datum):
-    pass
+def add_datum(seq, date, value):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("SELECT value FROM data WHERE seq = ? AND date = ?", [seq, date])
+    existing = c.fetchon()
+
+    if existing is not None:
+        return False
+
+    c.execute("INSERT INTO data (sequence, date, value)" +
+        "VALUES (?, ?, ?)", [seq, date, value])
+
+    c.commit()
+    conn.close()
+
+    return True
 
 # get one datum, i.e., data for one sequence at a specific date
 def get_datum(seq, date):
-    pass
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("SELECT value FROM data WHERE sequence = ? AND date = ?",
+        [seq, date])
+
+    value = c.fetchone()
+    conn.close()
+
+    return value
 
 # update one specific datum
-def update_datum(seq, date, datum):
-    pass
+def update_datum(seq, date, value):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("UPDATE data SET value = ? WHERE sequence = ? AND date = ?",
+        [value, sequence, date])
+    
+    c.commit()
+    conn.close()
+
+    return True
 
 # delete one specific datum
 def delete_datum(seq, date):
-    pass
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("DELETE FROM data WHERE sequence = ? and date = ? LIMIT 1",
+        [seq, date])
+    
+    c.commit()
+    conn.close()
+
+    return True
 
 ### DATE ######################################################################
 
