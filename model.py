@@ -56,9 +56,9 @@ def add_sequence(seq, view, data=None):
         "VALUES (?, ?, ?)", [seq.name, view.type, view.color_info])
 
     if data is not None:
-        for datum in data:
+        for datum in data.keys():
             c.execute("INSERT INTO data (sequence, date, value)" +
-                "VALUES (?, ?, ?)", [seq.name, datum.date, datum.value])
+                "VALUES (?, ?, ?)", [seq.name, datum, data[datum]])
 
     c.commit()
     c.close()
@@ -66,8 +66,31 @@ def add_sequence(seq, view, data=None):
     return True
 
 # update sequence attributes
-def update_sequence(seq, view=None, data=None):
-    pass
+#
+# param seq - string - name of sequence to update
+# param label - string - OPTIONAL - new label for sequence
+# param data - dict - OPTIONAL - replace existing sequence data with this data
+#
+# return True - success
+def update_sequence(seq, label=None, data=None):
+    if label is None and data is None:
+        return True
+
+    conn = get_conn()
+    c = conn.cursor()
+
+    if label is not None:
+        c.execute("UPDATE sequences SET label = ?" +
+            "WHERE name = ? LIMIT 1", [label])
+
+    if data is not None:
+        c.execute("DELETE FROM data WHERE sequence = ?", [seq])
+        for datum in data.keys():
+            c.execute("INSERT INTO data (sequence, date, value)" +
+                "VALUES (?, ?, ?)", [seq, datum, data[datum]])
+
+    c.commit()
+    conn.close()
 
 # get all data for one sequence
 #
