@@ -26,8 +26,25 @@ def fail(msg):
 
 # get all data from all sequences
 def get_all_data():
-    pass
+    conn = get_conn()
+    c = conn.cursor()
 
+    c.execute("SELECT sequence, date, value FROM data ORDER BY date DESC")
+
+    data = c.fetchall()
+
+    sequences = {}
+    for datum in data:
+        if not sequences.has_key(datum[0]):
+            sequences[datum[0]] = []
+        sequences[datum[0]].append({
+            'date'  : datum[1],
+            'value' : datum[2],
+        })
+
+    conn.close()
+
+    return sequences
 
 ### SEQUENCE ##################################################################
 
