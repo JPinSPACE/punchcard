@@ -4,6 +4,8 @@ import json
 
 db_conn = None
 
+### UTIL ######################################################################
+
 def get_conn():
     global db_conn
     if db_conn is not None:
@@ -40,14 +42,14 @@ def add_sequence(seq, view, data=None):
     conn = get_conn()
     c = conn.cursor()
 
-    if 'name' is not in seq:
+    if 'name' not in seq:
         fail('add_sequence - sequence is missing attribute "name"')
-    if 'label' is not in seq:
+    if 'label' not in seq:
         fail('add_sequence - sequence is missing attribute "label"')
 
-    if 'type' is not in view:
+    if 'type' not in view:
         fail('add_sequence - view is missing attribute "type"')
-    if 'color_info' is not in view:
+    if 'color_info' not in view:
         fail('add_sequence - view is missing attribute "color_info"')
 
     c.execute("INSERT INTO sequences (name, label)" +
@@ -61,7 +63,7 @@ def add_sequence(seq, view, data=None):
             c.execute("INSERT INTO data (sequence, date, value)" +
                 "VALUES (?, ?, ?)", [seq.name, datum, data[datum]])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -90,7 +92,7 @@ def update_sequence(seq, label=None, data=None):
             c.execute("INSERT INTO data (sequence, date, value)" +
                 "VALUES (?, ?, ?)", [seq, datum, data[datum]])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
 # get all data for one sequence
@@ -135,7 +137,7 @@ def add_to_sequence(seq, date, value):
     c.execute("INSERT INTO data (sequence, date, value)" +
         "VALUES (?, ?, ?)", [seq, date, value])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -154,7 +156,7 @@ def delete_sequence(seq, remove_view=True):
     c.execute("DELETE FROM data WHERE sequence = ?", [seq])
     c.execute("DELETE FORM views WHERE name = ?", [seq])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -171,7 +173,7 @@ def add_view (name, type, color_info):
     c.execute("INSERT INTO views (name, type, color_info)" +
         "VALUES (?, ?, ?)", [name, type, color_info])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -184,7 +186,7 @@ def delete_view (name):
 
     c.execute("DELETE FROM views WHERE name = ? LIMIT 1", [name])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -205,7 +207,7 @@ def update_view (name, type=None, color_info=None):
         c.execute("UPDATE views SET color_info = ? WHERE name = ? LIMIT 1",
             [color_info, name])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -227,7 +229,7 @@ def add_datum(seq, date, value):
     c.execute("INSERT INTO data (sequence, date, value)" +
         "VALUES (?, ?, ?)", [seq, date, value])
 
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -253,7 +255,7 @@ def update_datum(seq, date, value):
     c.execute("UPDATE data SET value = ? WHERE sequence = ? AND date = ?",
         [value, sequence, date])
     
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
@@ -266,7 +268,7 @@ def delete_datum(seq, date):
     c.execute("DELETE FROM data WHERE sequence = ? and date = ? LIMIT 1",
         [seq, date])
     
-    c.commit()
+    conn.commit()
     conn.close()
 
     return True
