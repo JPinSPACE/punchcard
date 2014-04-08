@@ -196,7 +196,7 @@ def add_view (name, type, color_info):
     return True
 
 
-# delete existing view. will fail if view is in use
+# delete existing view. will fail if view is in use (TODO)
 def delete_view (name):
     conn = get_conn()
     c = conn.cursor()
@@ -207,6 +207,21 @@ def delete_view (name):
     conn.close()
 
     return True
+
+# retrieve view
+def get_view (name):
+    conn = get_conn()
+    c = conn.cursor()
+
+    c.execute("SELECT type, color_info"
+              "FROM views WHERE name = ? LIMIT 1", [name])
+
+    view = c.fetchone()
+
+    conn.commit()
+    conn.close()
+
+    return view
 
 # update view's type and/or color_info
 def update_view (name, type=None, color_info=None):
