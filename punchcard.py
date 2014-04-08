@@ -1,7 +1,8 @@
 from string import Template
 import random
+import model
 
-def get_color(series, i):
+def get_color_tmp(series, i):
     value = series['data'][i]
     if series['type'] == 'binary':
         if value == 1:
@@ -24,6 +25,44 @@ def random_data(length, choices):
     for i in range(length):
         sequence.append(random.randrange(choices))
     return sequence
+
+def get_transformed_data():
+    sequences = model.get_sequence_names()
+
+    all_sequence_data = {}
+
+    for sequence in sequences:
+        data = model.get_sequence_data(sequence)
+        view = model.get_view(sequence)
+        all_sequence_data[sequence] = transform_data(data, view)
+
+    return all_sequence_data
+
+def transform_data(data, view):
+    for i in range(len(data)):
+        data[i] = get_color(data[i], view)
+
+    return data
+
+def get_color(value, view):
+    color = view['color']
+    if view['type'] == 'binary':
+        if value == 1:
+            return 'hsl(' + str(view['color']) + ', 80%, 50%)'
+        else:
+            return '#ffffff'
+    elif view['type'] == 'absolute':
+        inc = 70 / (view['max'] - view['min'])
+        light = 100 - value * inc
+        return "hsl(%d, 80%%, %d%%)" % (view['color'], light)
+    elif view['type'] == 'relative':
+        inc = 70 / (max(view['data']) - min(view['data']))
+        light = 100 - value * inc
+        return "hsl(%d, 80%%, %d%%)" % (view['color'], light)
+    else:
+        return '#ffffff'
+
+
 
 def main():
     print "Content-Type: text/html;charset=utf-8"
@@ -93,7 +132,7 @@ def main():
     for i in range(grid_length):
         this_row = ''
         for col in data:
-            color = get_color(col, i)
+            color = get_color_tmp(col, i)
             this_row += cell.substitute( {'color' : color })
         table_rows += row.substitute({'row_cells' : this_row})
 
