@@ -118,7 +118,7 @@ def get_sequence_data(seq):
     c = conn.cursor()
 
     c.execute("SELECT date, value FROM data "
-        "WHERE sequence = ? ORDER BY date DESC")
+        "WHERE sequence = ? ORDER BY date DESC", (seq))
 
     data = c.fetchall()
 
