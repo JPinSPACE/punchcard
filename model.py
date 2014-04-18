@@ -208,8 +208,6 @@ def get_view (name):
 
     view = c.fetchone()
 
-    conn.commit()
-
     return view
 
 # update view's type and/or color_info
