@@ -42,8 +42,6 @@ def get_all_data():
             'value' : datum[2],
         })
 
-    conn.close()
-
     return sequences
 
 ### SEQUENCE ##################################################################
@@ -69,19 +67,18 @@ def add_sequence(seq, view, data=None):
     if 'color_info' not in view:
         fail('add_sequence - view is missing attribute "color_info"')
 
-    c.execute("INSERT INTO sequences (name, label)" +
+    c.execute("INSERT INTO sequences (name, label) "
         "VALUES (?, ?)", [seq.name, seq.label])
 
-    c.execute("INSERT INTO views (name, type, color_info)" +
+    c.execute("INSERT INTO views (name, type, color_info) "
         "VALUES (?, ?, ?)", [seq.name, view.type, view.color_info])
 
     if data is not None:
         for datum in data.keys():
-            c.execute("INSERT INTO data (sequence, date, value)" +
+            c.execute("INSERT INTO data (sequence, date, value) "
                 "VALUES (?, ?, ?)", [seq.name, datum, data[datum]])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -100,17 +97,16 @@ def update_sequence(seq, label=None, data=None):
     c = conn.cursor()
 
     if label is not None:
-        c.execute("UPDATE sequences SET label = ?" +
+        c.execute("UPDATE sequences SET label = ? "
             "WHERE name = ? LIMIT 1", [label])
 
     if data is not None:
         c.execute("DELETE FROM data WHERE sequence = ?", [seq])
         for datum in data.keys():
-            c.execute("INSERT INTO data (sequence, date, value)" +
+            c.execute("INSERT INTO data (sequence, date, value) "
                 "VALUES (?, ?, ?)", [seq, datum, data[datum]])
 
     conn.commit()
-    conn.close()
 
 # get all data for one sequence
 #
@@ -121,12 +117,10 @@ def get_sequence_data(seq):
     conn = get_conn()
     c = conn.cursor()
 
-    c.execute("SELECT date, value FROM data" +
+    c.execute("SELECT date, value FROM data "
         "WHERE sequence = ? ORDER BY date DESC")
 
     data = c.fetchall()
-
-    conn.close()
 
     return data
 
@@ -151,11 +145,10 @@ def add_to_sequence(seq, date, value):
     conn = get_conn()
     c = conn.cursor()
 
-    c.execute("INSERT INTO data (sequence, date, value)" +
+    c.execute("INSERT INTO data (sequence, date, value) "
         "VALUES (?, ?, ?)", [seq, date, value])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -174,7 +167,6 @@ def delete_sequence(seq, remove_view=True):
     c.execute("DELETE FORM views WHERE name = ?", [seq])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -187,11 +179,10 @@ def add_view (name, type, color_info):
     conn = get_conn()
     c = conn.cursor()
 
-    c.execute("INSERT INTO views (name, type, color_info)" +
+    c.execute("INSERT INTO views (name, type, color_info) "
         "VALUES (?, ?, ?)", [name, type, color_info])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -204,7 +195,6 @@ def delete_view (name):
     c.execute("DELETE FROM views WHERE name = ? LIMIT 1", [name])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -219,7 +209,6 @@ def get_view (name):
     view = c.fetchone()
 
     conn.commit()
-    conn.close()
 
     return view
 
@@ -240,7 +229,6 @@ def update_view (name, type=None, color_info=None):
             [color_info, name])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -258,11 +246,10 @@ def add_datum(seq, date, value):
     if existing is not None:
         return False
 
-    c.execute("INSERT INTO data (sequence, date, value)" +
+    c.execute("INSERT INTO data (sequence, date, value) "
         "VALUES (?, ?, ?)", [seq, date, value])
 
     conn.commit()
-    conn.close()
 
     return True
 
@@ -275,7 +262,6 @@ def get_datum(seq, date):
         [seq, date])
 
     value = c.fetchone()
-    conn.close()
 
     return value
 
@@ -288,7 +274,6 @@ def update_datum(seq, date, value):
         [value, sequence, date])
     
     conn.commit()
-    conn.close()
 
     return True
 
@@ -301,6 +286,5 @@ def delete_datum(seq, date):
         [seq, date])
     
     conn.commit()
-    conn.close()
 
     return True
