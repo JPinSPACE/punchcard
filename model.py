@@ -203,8 +203,8 @@ def get_view (name):
     conn = get_conn()
     c = conn.cursor()
 
-    c.execute("SELECT type, color_info"
-              "FROM views WHERE name = ? LIMIT 1", [name])
+    c.execute("SELECT type, color_info "
+              "FROM views WHERE name = ? LIMIT 1", (name))
 
     view = c.fetchone()
 
