@@ -6,6 +6,9 @@ db_conn = None
 
 ### UTIL ######################################################################
 
+# Retrieve db connection
+#
+# return - db handle
 def get_conn():
     global db_conn
     if db_conn is not None:
@@ -13,6 +16,7 @@ def get_conn():
     else:
         try:
             db_conn = lite.connect('punchcard.db')
+            db_conn.row_factory = lite.Row
             return db_conn
         except lite.Error, e:
             print "Error %s:" % e.args[0]
@@ -24,7 +28,9 @@ def fail(msg):
 
 ### ALL DATA ##################################################################
 
-# get all data from all sequences
+# Get all data from all sequences
+#
+# return dict - dict of arrays of sequence data
 def get_all_data():
     conn = get_conn()
     c = conn.cursor()
@@ -35,18 +41,18 @@ def get_all_data():
 
     sequences = {}
     for datum in data:
-        if not sequences.has_key(datum[0]):
-            sequences[datum[0]] = []
-        sequences[datum[0]].append({
-            'date'  : datum[1],
-            'value' : datum[2],
+        if not sequences.has_key(datum['sequence']):
+            sequences[datum['sequence']] = []
+        sequences[datum['sequence']].append({
+            'date'  : datum['date'],
+            'value' : datum['value'],
         })
 
     return sequences
 
 ### SEQUENCE ##################################################################
 
-# add sequence with optional data
+# Add sequence with optional data
 #
 # param seq - dict - sequence name and label
 # param view - dict - information required for this view type
@@ -118,9 +124,13 @@ def get_sequence_data(seq):
     c = conn.cursor()
 
     c.execute("SELECT date, value FROM data "
-        "WHERE sequence = ? ORDER BY date DESC", (seq))
+        "WHERE sequence = ? ORDER BY date DESC", (seq,))
 
-    data = c.fetchall()
+    raw_data = c.fetchall()
+    data = {}
+
+    for datum in raw_data:
+        data[datum['date']] = datum['value']
 
     return data
 
@@ -132,7 +142,7 @@ def get_sequence_names():
 
     sequences = c.fetchall()
 
-    return sequences
+    return [ row['name'] for row in sequences ]
 
 # add one datum to one sequence
 #
@@ -204,11 +214,14 @@ def get_view (name):
     c = conn.cursor()
 
     c.execute("SELECT type, color_info "
-              "FROM views WHERE name = ? LIMIT 1", (name))
+              "FROM views WHERE name = ? LIMIT 1", (name,))
 
     view = c.fetchone()
 
-    return view
+    return {
+            'type' : view['type'],
+            'color_info' : view['color_info'],
+            }
 
 # update view's type and/or color_info
 def update_view (name, type=None, color_info=None):
