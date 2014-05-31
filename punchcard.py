@@ -1,4 +1,5 @@
 import model
+import view
 import datetime
 import json
 
@@ -55,6 +56,9 @@ def get_data():
                     transformed[seq].append(color_info['color'])
                 else:
                     transformed[seq].append([0, 0, 0])
+        else: #temporarily pad with zeros
+            for value in values[seq]:
+                transformed[seq].append([0, 0, 0])
 
     return transformed
 
@@ -62,7 +66,6 @@ def get_data():
 def main():
     data = get_data()
 
-    print "Content-type: text/plain\n"
-    print data
+    table = view.get_html_from_sequences(data)
 
-main()
+    view.output_page(table)
