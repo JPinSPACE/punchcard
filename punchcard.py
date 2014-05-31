@@ -56,16 +56,13 @@ def get_data():
                 else:
                     transformed[seq].append([0, 0, 0])
 
-    print "Content-type: text/plain\n"
-    print transformed
+    return transformed
 
-
-
-
-        
 
 def main():
     data = get_data()
 
+    print "Content-type: text/plain\n"
+    print data
 
 main()
