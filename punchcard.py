@@ -14,23 +14,17 @@ def get_data():
 
     seqs = model.get_sequence_names()
 
-    # retrieve data and build dictionary keyed on date
+    # retrieve data
     for seq in seqs:
         max_value[seq] = 0
         values[seq] = []
         views[seq] = {}
 
         seq_dict = {}
-        seq_data = model.get_sequence_data(seq)
+        raw_data[seq] = model.get_sequence_data(seq)
 
-        view = model.get_view(seq)
-        views[seq]['type'] = view[0]
-        views[seq]['color_info'] = view[1]
+        views[seq] = model.get_view(seq)
 
-        for datum in seq_data:
-            seq_dict[datum[0]] = datum[1]
-
-        raw_data[seq] = seq_dict
 
     d = datetime.date.today()
     day = datetime.timedelta(days=1)
@@ -62,6 +56,7 @@ def get_data():
                 else:
                     transformed[seq].append([0, 0, 0])
 
+    print "Content-type: text/plain\n"
     print transformed
 
 
