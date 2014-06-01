@@ -5,6 +5,8 @@ import json
 
 GRID_LENGTH = 20
 
+# Transform database data into values between 0.0 and 1.0, representing
+# the intensity of that data point
 def get_data():
     raw_data = {}
     values = {}
