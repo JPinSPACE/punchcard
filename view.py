@@ -11,7 +11,8 @@ def get_html_from_sequences(sequences):
     t = open('templates/cell.html', 'r')
     cell = Template(t.read())
 
-    length = max([len(seq) for seq in sequences])
+    # all sequences should be the same length so just grab the first one
+    length = len(sequences[sequences.keys()[0]]['value'])
 
     table = ''
 
