@@ -98,7 +98,7 @@ if sample is True:
 
     d = datetime.date.today()
     day = datetime.timedelta(days=1)
-    for i in range(20):
+    for i in range(50):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('worked_out', ?, ?)", [d.__str__(), random.randrange(2)])
         d -= day
@@ -113,7 +113,7 @@ if sample is True:
 
     d = datetime.date.today()
     day = datetime.timedelta(days=1)
-    for i in range(20):
+    for i in range(50):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('sleeping', ?, ?)", [d.__str__(), random.randrange(4)])
         d -= day
@@ -128,7 +128,7 @@ if sample is True:
 
     d = datetime.date.today()
     day = datetime.timedelta(days=1)
-    for i in range(20):
+    for i in range(50):
         cur.execute("INSERT INTO data (sequence, date, value)" +
             "VALUES ('random', ?, ?)", [d.__str__(), random.randrange(50)])
         d -= day
