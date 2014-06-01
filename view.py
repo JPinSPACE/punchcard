@@ -2,6 +2,9 @@ from string import Template
 
 def get_html_from_sequences(sequences):
     SATURATION = 80
+    MAX_LIGHT = 100
+    MIN_LIGHT = 50
+    LIGHT_RANGE = MAX_LIGHT - MIN_LIGHT
 
     t = open('templates/row.html', 'r')
     row = Template(t.read())
@@ -15,9 +18,10 @@ def get_html_from_sequences(sequences):
     for i in range(length):
         this_row = ''
         for seq in sequences:
+            light = LIGHT_RANGE * (1.0 - sequences[seq]['value'][i]) + MIN_LIGHT
             color = "hsl(%d, %d%%, %d%%)" % (sequences[seq]['hue'],
                                              SATURATION,
-                                             sequences[seq]['light'][i])
+                                             light)
             this_row += cell.substitute({ 'color' : color })
         table += row.substitute({'row_cells' : this_row })
 

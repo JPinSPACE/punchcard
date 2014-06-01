@@ -10,6 +10,7 @@ def get_data():
     values = {}
     views = {}
     max_value = {}
+    min_value = {}
 
     transformed = {}
 
@@ -18,6 +19,7 @@ def get_data():
     # retrieve data
     for seq in seqs:
         max_value[seq] = 0
+        min_value[seq] = None
         values[seq] = []
         views[seq] = {}
 
@@ -36,10 +38,16 @@ def get_data():
 
         for seq in seqs:
             if date in raw_data[seq].keys():
-                # since we're already iterating over this we may
-                # as well grab the maximum value now
-                if raw_data[seq][date] > max_value[seq]:
-                    max_value[seq] = raw_data[seq][date]
+                if views[seq]['type'] == 'relative':
+                    value = raw_data[seq][date]
+                    # since we're already iterating over this we may
+                    # as well grab the max/min values now
+                    if value > max_value[seq]:
+                        max_value[seq] = raw_data[seq][date]
+
+                    if min_value[seq] is None or value < min_value[seq]:
+                        min_value[seq] = raw_data[seq][date]
+
                 values[seq].append(raw_data[seq][date])
             else:
                 values[seq].append(0)
@@ -51,17 +59,30 @@ def get_data():
         color_info = json.loads(views[seq]['color_info'])
 
         transformed[seq]['hue'] = color_info['hue']
-        transformed[seq]['light'] = []
+        transformed[seq]['value'] = []
 
-        if views[seq]['type'] == 'binary':
+        view_type = views[seq]['type']
+
+        if view_type == 'binary':
             for value in values[seq]:
                 if value == 1:
-                    transformed[seq]['light'].append(50)
+                    transformed[seq]['value'].append(1)
                 else:
-                    transformed[seq]['light'].append(100) # full light is white
-        else: #temporarily pad with zeros
+                    transformed[seq]['value'].append(0)
+        elif view_type == 'absolute' or view_type == 'relative':
+            if view_type == 'relative':
+                value_range = max_value[seq] - min_value[seq]
+            else:
+                value_range = color_info['shades']
+
+            step = 1.0 / value_range
             for value in values[seq]:
-                transformed[seq]['light'].append(100)
+                # run through min() to account for imprecise division
+                fixed_value = min(1.0, value * step)
+                transformed[seq]['value'].append(fixed_value)
+        else: # unimplemented type, zero it out
+            for value in values[seq]:
+                transformed[seq]['value'].append(0)
 
     return transformed
 
