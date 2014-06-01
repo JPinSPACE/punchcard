@@ -47,18 +47,21 @@ def get_data():
         d -= day
 
     for seq in seqs:
-        transformed[seq] = []
+        transformed[seq] = {}
         color_info = json.loads(views[seq]['color_info'])
+
+        transformed[seq]['hue'] = color_info['hue']
+        transformed[seq]['light'] = []
 
         if views[seq]['type'] == 'binary':
             for value in values[seq]:
                 if value == 1:
-                    transformed[seq].append(color_info['color'])
+                    transformed[seq]['light'].append(50)
                 else:
-                    transformed[seq].append([0, 0, 0])
+                    transformed[seq]['light'].append(100) # full light is white
         else: #temporarily pad with zeros
             for value in values[seq]:
-                transformed[seq].append([0, 0, 0])
+                transformed[seq]['light'].append(100)
 
     return transformed
 

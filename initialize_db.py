@@ -89,7 +89,7 @@ if sample is True:
     print "Inserting sample data.."
 
 ### BINARY SAMPLE #############################################################
-    color_info = {'color' : (255, 255, 0) }
+    color_info = {'hue' : 60 }
     color_info = json.dumps(color_info)
     cur.execute("INSERT INTO sequences (name, label)" + 
         "VALUES ('worked_out', 'Worked Out')")
@@ -104,7 +104,7 @@ if sample is True:
         d -= day
 
 ### ABSOLUTE SAMPLE ###########################################################
-    color_info = {'color' : (0, 0, 255), 'shades' : 4 }
+    color_info = {'hue' : 240, 'shades' : 4 }
     color_info = json.dumps(color_info)
     cur.execute("INSERT INTO sequences (name, label)" + 
         "VALUES ('sleeping', 'Sleeping Quality')")
@@ -119,7 +119,7 @@ if sample is True:
         d -= day
 
 ### RELATIVE SAMPLE ###########################################################
-    color_info = {'color' : (0, 255, 0) }
+    color_info = {'hue' : 128 }
     color_info = json.dumps(color_info)
     cur.execute("INSERT INTO sequences (name, label)" + 
         "VALUES ('random', 'Random data!')")
